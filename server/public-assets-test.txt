@@ -1,0 +1,2 @@
+If you can see this file at http://<host>:3001/public-assets-test.txt then static root mapping works.
+

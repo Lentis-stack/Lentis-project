@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Host - Live Event</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="page" data-page="host">
+    <div class="bg" id="hostBg" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="brand" aria-label="Wedding Doodle Logo">
+        <div class="brand-doodle" id="doodleLogo3" aria-hidden="true">✿</div>
+        <div class="brand-text">
+          <div class="brand-title">HOST CONSOLE</div>
+          <div class="brand-subtitle">Event Management • Live Control</div>
+        </div>
+      </div>
+
+      <div class="pill" id="hostPill" title="Event scope">Host</div>
+    </header>
+
+    <!-- PASSWORD GATE -->
+    <section class="center" id="gateSection">
+      <div class="rsvp" id="gateCard" role="region" aria-label="Host password gate">
+        <div class="hero-copy" style="text-align:left;">
+          <h2 class="section-title" style="margin:0 0 8px 0;">Enter host password</h2>
+          <p class="section-subtitle" style="margin-top:0;">Restricted access to manage the live event and slideshow.</p>
+        </div>
+
+        <div class="rsvp-row" style="margin-top:14px;">
+          <input
+            id="hostPassword"
+            name="hostPassword"
+            class="input"
+            type="password"
+            placeholder="Password"
+            autocomplete="current-password"
+            maxlength="80"
+            required
+          />
+          <button class="btn btn-primary" id="hostLoginBtn" type="button">Login</button>
+        </div>
+
+        <div id="gateError" class="hint" style="color: rgba(255,150,150,.95); display:none; font-weight:800;"></div>
+
+        <div class="actions-row" style="margin-top:16px;">
+          <button class="btn btn-ghost" type="button" id="gateRetryBtn">Retry</button>
+          <a class="btn btn-ghost" href="./index.html">Back to Guest</a>
+        </div>
+
+        <div class="hint" style="margin-top:12px;">Tip: password is stored locally in this demo. Replace it with real auth when you add a backend.</div>
+      </div>
+    </section>
+
+    <!-- HOST UI -->
+    <section class="center" id="hostSection" style="display:none;">
+      <div class="host-grid" role="region" aria-label="Host features">
+        <!-- Left column -->
+        <div class="host-col">
+          <div class="host-card">
+            <div class="section-head">
+              <h2 class="section-title">Event management</h2>
+              <p class="section-subtitle">Update event details and session settings.</p>
+            </div>
+
+            <div class="form-grid">
+              <label class="label" for="eventTitle">Event title</label>
+              <input id="eventTitle" class="input" type="text" value="TARAGOLD2026" />
+
+              <label class="label" for="eventStatus">Live status</label>
+              <select id="eventStatus" class="input" style="padding:12px 14px;">
+                <option value="upcoming">Upcoming</option>
+                <option value="live" selected>Live</option>
+                <option value="ended">Ended</option>
+              </select>
+
+              <div class="actions-row" style="margin-top:14px;">
+                <button class="btn btn-secondary" type="button" id="saveEventBtn">Save</button>
+                <button class="btn btn-ghost" type="button" id="resetEventBtn">Reset</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="host-card">
+            <div class="section-head">
+              <h2 class="section-title">Live event control</h2>
+              <p class="section-subtitle">Controls the live slideshow behavior.</p>
+            </div>
+
+            <div class="controls-grid">
+              <div class="control-row">
+                <span class="control-label">Slideshow</span>
+                <div class="control-actions">
+                  <button class="btn btn-primary" id="slideshowStartBtn" type="button">Start</button>
+                  <button class="btn btn-ghost" id="slideshowStopBtn" type="button">Stop</button>
+                </div>
+              </div>
+
+              <div class="control-row">
+                <span class="control-label">Auto-advance</span>
+                <div class="control-actions">
+                  <button class="btn btn-ghost" id="speedSlowBtn" type="button">Slow</button>
+                  <button class="btn btn-ghost" id="speedNormalBtn" type="button" style="opacity:.95;">Normal</button>
+                  <button class="btn btn-ghost" id="speedFastBtn" type="button">Fast</button>
+                </div>
+              </div>
+
+              <div class="control-row">
+                <span class="control-label">Live updates</span>
+                <div class="control-actions">
+                  <span class="tag" id="liveUpdatesTag">Demo mode (no backend)</span>
+                </div>
+              </div>
+
+              <div class="hint" id="liveHookHint">
+                When you add a backend, call <b>setSlideshowItems([...])</b> with uploaded guest media URLs.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div class="host-col">
+          <div class="host-card">
+            <div class="section-head">
+              <h2 class="section-title">Slideshow</h2>
+              <p class="section-subtitle">Live guest uploads from the backend.</p>
+            </div>
+
+
+            <div class="slideshow-shell" aria-label="Host slideshow">
+<img id="slideshowImg" class="slideshow-img" alt="Slideshow" src="./assets/picture landing 2.jpg" />
+              <div class="slideshow-overlay">
+                <div class="slideshow-meta">
+                  <div><b id="slideIndex">1</b> <span style="color: rgba(255,255,255,.7);">/</span> <span id="slideTotal">3</span></div>
+                  <div id="slideLabel" style="margin-top:4px; color: rgba(255,255,255,.75); font-weight:800;">Waiting for uploads...</div>
+                </div>
+
+                <div class="slideshow-nav">
+                  <button class="btn btn-ghost" type="button" id="prevSlideBtn">Prev</button>
+                  <button class="btn btn-ghost" type="button" id="nextSlideBtn">Next</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="thumb-grid" style="margin-top:12px;" aria-label="Slideshow items preview">
+              <div id="hostThumbs" class="thumb-grid"></div>
+            </div>
+          </div>
+
+          <div class="host-card">
+            <div class="section-head">
+              <h2 class="section-title">Guest gallery</h2>
+              <p class="section-subtitle">Latest media uploads (photos & videos).</p>
+            </div>
+
+            <div class="gallery-actions" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
+              <div class="tag" id="galleryStatus">Loading...</div>
+              <button class="btn btn-ghost" type="button" id="galleryRefreshBtn">Refresh</button>
+              <span class="hint" style="margin:0;">Uses polling (demo). Switch to SSE/WebSockets later.</span>
+            </div>
+
+            <div id="hostGallery" class="gallery-grid" aria-label="Uploaded media gallery"></div>
+            <div class="hint" id="galleryHint" style="margin-top:10px;">Tip: refresh to see new uploads.</div>
+          </div>
+
+
+
+
+          <div class="host-card">
+            <div class="section-head">
+              <h2 class="section-title">Storage info</h2>
+              <p class="section-subtitle">Demo storage summary (no backend).</p>
+            </div>
+
+            <div class="storage-box">
+              <div class="storage-row"><span class="storage-label">Stored uploads</span> <b id="storageCount">3</b></div>
+              <div class="storage-row"><span class="storage-label">Used space</span> <b id="storageUsed">—</b></div>
+              <div class="storage-row"><span class="storage-label">Remaining</span> <b id="storageLeft">—</b></div>
+              <div class="hint">Hook this to your storage provider (S3/Firebase/etc.) later.</div>
+            </div>
+          </div>
+
+          <div class="host-card">
+            <div class="section-head">
+              <h2 class="section-title">QR code</h2>
+              <p class="section-subtitle">Guests can scan to open the guest page.</p>
+            </div>
+
+            <div class="qr-shell">
+              <div id="qrCode" class="qr-box" aria-label="QR code" role="img"></div>
+              <div class="hint">If QR generator libs aren’t available, you can render a static QR image.</div>
+              <div class="qr-link" id="qrLinkText" style="margin-top:10px; font-weight:800; color: rgba(255,255,255,.8);"></div>
+            </div>
+
+            <div class="actions-row" style="margin-top:14px;">
+              <button class="btn btn-primary" type="button" id="copyQrLinkBtn">Copy guest link</button>
+              <button class="btn btn-ghost" type="button" id="downloadQrBtn">Download QR</button>
+            </div>
+          </div>
+
+          <div class="host-card">
+            <div class="section-head">
+              <h2 class="section-title">Support</h2>
+              <p class="section-subtitle">Need help during the event?</p>
+            </div>
+
+            <div class="support-box" style="margin-top:12px;">
+              <div class="support-row">
+                <span class="support-label">Email</span>
+                <a class="support-link" href="mailto:saheed.ibraheem@yahoo.com">saheed.ibraheem@yahoo.com</a>
+              </div>
+
+              <div class="support-row">
+                <span class="support-label">Phone</span>
+                <a class="support-link" href="tel:+234 9115074050">+234 9115074050</a>
+              </div>
+
+              <div class="hint">Replace this content with your real support numbers.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <div class="actions-row" style="margin-top:16px; width: min(var(--maxw), 100%);">
+        <button class="btn btn-ghost" type="button" id="logoutBtn">Logout</button>
+      </div>
+    </section>
+
+    <footer class="bottom-note">
+      <span>Host Console • Password Protected</span>
+      <div class="lentis-watermark" aria-label="Powered by Lentis Memory Event">Powered by Lentis Memory Event</div>
+    </footer>
+  </main>
+
+
+  <script>
+    window.BACKEND_BASE_URL = window.BACKEND_BASE_URL || 'http://localhost:3001';
+  </script>
+  <script type="module" src="./host.js"></script>
+</body>
+</html>
+
+
